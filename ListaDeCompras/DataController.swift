@@ -28,5 +28,36 @@ final class DataController {
 		}
 		
 	}
+	
+	// Create Read Update Delete
+	
+	// TODO: Receber os atributos reais
+	func createProduct() -> Result<Product, Error> {
+		do {
+			let newProduct = Product(context: self.viewContext)
+			newProduct.name = "Coca-Cola"
+			newProduct.price = 6.50
+			
+			try self.viewContext.save()
+			
+			return .success(newProduct)
+		} catch {
+			return .failure(error)
+		}
+	}
+	
+	
+	func fetchProducts() -> Result<[Product], Error> {
+		do {
+			let productsFetchRequest = NSFetchRequest<Product>(entityName: "Product")
+			
+			let products = try self.viewContext.fetch(productsFetchRequest)
+			
+			return .success(products)
+		} catch {
+			return .failure(error)
+		}
+	}
+	
 }
 
