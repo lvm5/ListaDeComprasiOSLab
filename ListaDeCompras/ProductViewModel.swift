@@ -23,8 +23,11 @@ class ProductViewModel: ObservableObject {
 		}
 	}
 	
-	func createProduct() {
-		let result = DataController.shared.createProduct() // -> Result<Product, Error>
+	func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int) {
+		let productPrice: Float = Float(productIntPrice) + (Float(productCentPrice) / 100)
+		let newProductWrapper = ProductWrapper(name: productName, price: productPrice)
+		
+		let result = DataController.shared.createProduct(newProductWrapper) // -> Result<Product, Error>
 		
 		switch result {
 		case .success(let product):
