@@ -32,11 +32,11 @@ final class DataController {
 	// Create Read Update Delete
 	
 	// TODO: Receber os atributos reais
-	func createProduct() -> Result<Product, Error> {
+	func createProduct(_ productWrapper: ProductWrapper) -> Result<Product, Error> {
 		do {
 			let newProduct = Product(context: self.viewContext)
-			newProduct.name = "Coca-Cola"
-			newProduct.price = 6.50
+			newProduct.name = productWrapper.name
+			newProduct.price = productWrapper.price
 			
 			try self.viewContext.save()
 			

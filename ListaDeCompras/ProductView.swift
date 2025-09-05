@@ -11,21 +11,38 @@ struct ProductView: View {
 	
 	@StateObject var viewModel = ProductViewModel()
 	
+	@State var newProductViewIsPresented: Bool = false
+	
 	var body: some View {
-		
-		Text(viewModel.errorMessage ?? "")
-		
-		List {
-			ForEach(viewModel.products) { product in
-				// TODO: Tratar opcional na VM
-				Text(product.name ?? "Unknown Name")
+		NavigationStack {
+			Text(viewModel.errorMessage ?? "")
+			
+			List {
+				ForEach(viewModel.products) { product in
+					// TODO: Tratar opcional na VM
+					HStack {
+						Text(product.name ?? "Unknown Name")
+						Spacer()
+						Text("R$\(product.price, specifier: "%.2f")")
+					}
+				}
 			}
-		}
-		
-		Button {
-			viewModel.createProduct()
-		} label: {
-			Image(systemName: "plus.circle.fill")
+			.sheet(isPresented: $newProductViewIsPresented) {
+				NewProductSheetView(viewModel: viewModel)
+					.interactiveDismissDisabled()
+					.presentationDetents([.large, .medium])
+			}
+			
+			.toolbar {
+				ToolbarItem(placement: .confirmationAction) {
+					Button {
+						newProductViewIsPresented.toggle()
+					} label: {
+						Image(systemName: "plus.circle.fill")
+					}
+				}
+			}
+			
 		}
 		
 	}
