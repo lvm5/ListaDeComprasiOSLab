@@ -25,7 +25,17 @@ struct ProductView: View {
 						Spacer()
 						Text("R$\(product.price, specifier: "%.2f")")
 					}
+					
+					.swipeActions {
+						Button(role: .destructive) {
+							viewModel.deleteProduct(product)
+						} label: {
+							Image(systemName: "trash")
+						}
+					}
 				}
+
+				
 			}
 			.sheet(isPresented: $newProductViewIsPresented) {
 				NewProductSheetView(viewModel: viewModel)
@@ -42,7 +52,7 @@ struct ProductView: View {
 					}
 				}
 			}
-			
+			.navigationTitle("Produtos")
 		}
 		
 	}

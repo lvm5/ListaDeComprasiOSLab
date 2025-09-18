@@ -16,6 +16,7 @@ struct NewProductSheetView: View {
 	@State var productName: String = ""
 	@State var productIntPrice: Int = 0
 	@State var productCentPrice: Int = 0
+	@State var productCategory: String = "Bebidas"
 	
 	var body: some View {
 		NavigationStack {
@@ -27,6 +28,15 @@ struct NewProductSheetView: View {
 					TextField(text: $productName) {
 						Text("Nome do produto")
 					}
+
+				}
+				
+				Picker(selection: $productCategory) {
+					ForEach(ProductCategory.allCases) { category in
+						Text(category.id)
+					}
+				} label: {
+					Text("Categoria")
 				}
 				
 				VStack(alignment: .leading) {
@@ -65,7 +75,7 @@ struct NewProductSheetView: View {
 					HStack {
 						Spacer()
 						Button {
-							viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice)
+							viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategoryString: productCategory)
 							dismiss()
 						} label: {
 							Text("Cadastrar")
