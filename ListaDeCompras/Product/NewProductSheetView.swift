@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewProductSheetView: View {
 	
+	@StateObject var categoryViewModel = CategoryViewModel()
 	@ObservedObject var viewModel: ProductViewModel
 	
 	@Environment(\.dismiss) var dismiss
@@ -16,7 +17,14 @@ struct NewProductSheetView: View {
 	@State var productName: String = ""
 	@State var productIntPrice: Int = 0
 	@State var productCentPrice: Int = 0
-	@State var productCategory: String = "Bebidas"
+	@State var productCategory: CategoryEntity? = nil
+	
+//	init(viewModel: ProductViewModel) {
+//		self.viewModel = viewModel
+//		
+//		self.productCategory = categoryViewModel.categories.first
+//		
+//	}
 	
 	var body: some View {
 		NavigationStack {
@@ -32,8 +40,8 @@ struct NewProductSheetView: View {
 				}
 				
 				Picker(selection: $productCategory) {
-					ForEach(ProductCategory.allCases) { category in
-						Text(category.id)
+					ForEach(categoryViewModel.categories) { category in
+						Text(category.name ?? "Unknown Category")
 					}
 				} label: {
 					Text("Categoria")
@@ -71,34 +79,27 @@ struct NewProductSheetView: View {
 					}
 				}
 				
-				Section {
-					HStack {
-						Spacer()
-						Button {
-							viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategoryString: productCategory)
-							dismiss()
-						} label: {
-							Text("Cadastrar")
-						}
-						.disabled(productName == "" ? true : false)
-						Spacer()
+			}
+			.toolbar {
+				ToolbarItem(placement: .cancellationAction) {
+					Button {
+						dismiss()
+					} label: {
+						Image(systemName: "xmark")
 					}
 				}
 				
-				Section {
-					HStack {
-						Spacer()
-						Button {
-							dismiss()
-						} label: {
-							Text("Cancelar")
-								.foregroundStyle(.red)
-								.bold()
-						}
-						Spacer()
+				ToolbarItem(placement: .confirmationAction) {
+					Button {
+						viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategoryString: productCategory?.name ?? "Unknown Category")
+						dismiss()
+					} label: {
+						Image(systemName: "checkmark")
 					}
+					.disabled(productName == "" ? true : false)
 				}
 			}
+			
 			.navigationTitle("Novo Produto")
 		}
 		

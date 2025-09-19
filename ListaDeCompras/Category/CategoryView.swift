@@ -13,12 +13,20 @@ struct CategoryView: View {
 	
 	@State var newCategorySheetIsPresented: Bool = false
 	
+	@Environment(\.defaultMinListRowHeight) var listRowHeight
+	
 	var body: some View {
 		NavigationStack {
 			
 			List {
 				ForEach(viewModel.categories) { category in
-					Text(category.name ?? "Unknown Category")
+					HStack {
+						Circle()
+							.fill(category.color?.stringHexToColor() ?? .white)
+							.frame(width: listRowHeight / 1.5)
+						
+						Text(category.name ?? "Unknown Category")
+					}
 				}
 			}
 			.sheet(isPresented: $newCategorySheetIsPresented) {

@@ -40,7 +40,7 @@ struct ProductView: View {
 			.sheet(isPresented: $newProductViewIsPresented) {
 				NewProductSheetView(viewModel: viewModel)
 					.interactiveDismissDisabled()
-					.presentationDetents([.large, .medium])
+					.presentationDetents([.fraction(0.70)])
 			}
 			
 			.toolbar {

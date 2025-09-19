@@ -43,10 +43,12 @@ struct NewCategorySheetView: View {
 				
 				ToolbarItem(placement: .confirmationAction) {
 					Button {
-						viewModel.createCategory()
+						viewModel.createCategory(categoryName: categoryName, categoryColor: categoryColor)
+						dismiss()
 					} label: {
 						Image(systemName: "checkmark")
 					}
+					.disabled(categoryName == "" ? true : false)
 				}
 			}
 			
