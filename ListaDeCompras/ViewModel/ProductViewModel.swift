@@ -23,9 +23,13 @@ class ProductViewModel: ObservableObject {
 		}
 	}
 	
-	func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int) {
+    func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int, productCategoryString: String) {
+        
 		let productPrice: Float = Float(productIntPrice) + (Float(productCentPrice) / 100)
-		let newProductWrapper = ProductWrapper(name: productName, price: productPrice)
+        
+        let productCategory: ProductCategory = ProductCategory(rawValue: productCategoryString.replacingOccurrences(of: " ", with: "_"))!
+        
+        let newProductWrapper = ProductWrapper(name: productName, price: productPrice, category: productCategory)
 		
 		let result = DataController.shared.createProduct(newProductWrapper) // -> Result<Product, Error>
 		
@@ -36,4 +40,19 @@ class ProductViewModel: ObservableObject {
 			self.errorMessage = "Error creating Product: \(error)"
 		}
 	}
+    
+    func deleteProduct(_ productToDelete: Product) {
+        
+        products.removeAll { product in
+            product == productToDelete
+        }
+        let result = DataController.shared.deleteProduct(productToDelete)
+        
+        switch result {
+        case .success(let productName):
+            print("\(productName) Success , deleted!")
+        case .failure(let error):
+            self.errorMessage = "Error deleting Product: \(error)"
+        }
+    }
 }
