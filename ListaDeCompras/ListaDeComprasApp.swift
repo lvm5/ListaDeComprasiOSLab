@@ -9,6 +9,10 @@ import SwiftUI
 
 @main
 struct ListaDeComprasApp: App {
+	
+	let dataController = DataController.shared
+	@AppStorage("didSeed") private var didSeed: Bool = false
+	
 	var body: some Scene {
 		WindowGroup {
 			TabView {
@@ -29,6 +33,16 @@ struct ListaDeComprasApp: App {
 							Image(systemName: "tag.fill")
 						}
 					}
+			}
+			.task {
+				if !didSeed {
+					do {
+						try await DataController.seedIfNeeded(container: dataController.persistentContainer)
+						didSeed = true
+					} catch {
+						print("Seed failed: \(error)")
+					}
+				}
 			}
 		}
 	}

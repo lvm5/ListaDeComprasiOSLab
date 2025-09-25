@@ -27,6 +27,14 @@ struct CategoryView: View {
 						
 						Text(category.name ?? "Unknown Category")
 					}
+					.swipeActions {
+						Button(role: .destructive) {
+							viewModel.deleteCategory(category)
+						} label: {
+							Image(systemName: "trash")
+						}
+					}
+					
 				}
 			}
 			.sheet(isPresented: $newCategorySheetIsPresented) {

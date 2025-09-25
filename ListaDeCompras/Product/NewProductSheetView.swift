@@ -19,13 +19,6 @@ struct NewProductSheetView: View {
 	@State var productCentPrice: Int = 0
 	@State var productCategory: CategoryEntity? = nil
 	
-//	init(viewModel: ProductViewModel) {
-//		self.viewModel = viewModel
-//		
-//		self.productCategory = categoryViewModel.categories.first
-//		
-//	}
-	
 	var body: some View {
 		NavigationStack {
 			Form {
@@ -40,8 +33,12 @@ struct NewProductSheetView: View {
 				}
 				
 				Picker(selection: $productCategory) {
-					ForEach(categoryViewModel.categories) { category in
+					ForEach(categoryViewModel.categories, id:\.name) { category in
 						Text(category.name ?? "Unknown Category")
+							.tag(category)
+					}
+					.onAppear {
+						self.productCategory = self.categoryViewModel.categories.first
 					}
 				} label: {
 					Text("Categoria")
@@ -91,7 +88,7 @@ struct NewProductSheetView: View {
 				
 				ToolbarItem(placement: .confirmationAction) {
 					Button {
-						viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategoryString: productCategory?.name ?? "Unknown Category")
+						viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategory: productCategory!)
 						dismiss()
 					} label: {
 						Image(systemName: "checkmark")

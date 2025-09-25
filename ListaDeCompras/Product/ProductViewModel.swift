@@ -15,10 +15,8 @@ class ProductViewModel: ObservableObject {
 		fetchProducts()
 	}
 	
-	func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int, productCategoryString: String) {
+	func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int, productCategory: CategoryEntity) {
 		let productPrice: Float = Float(productIntPrice) + (Float(productCentPrice) / 100)
-		
-		let productCategory: ProductCategory = ProductCategory(rawValue: productCategoryString.replacingOccurrences(of: " ", with: "_"))!
 		
 		let newProductWrapper = ProductWrapper(name: productName, price: productPrice, category: productCategory)
 		

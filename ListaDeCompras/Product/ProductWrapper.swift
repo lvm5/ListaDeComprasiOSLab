@@ -10,9 +10,9 @@ import Foundation
 struct ProductWrapper {
 	let name: String
 	let price: Float
-	let category: ProductCategory
+	let category: CategoryEntity
 	
-	init(name: String, price: Float, category: ProductCategory) {
+	init(name: String, price: Float, category: CategoryEntity) {
 		self.name = name
 		self.category = category
 		

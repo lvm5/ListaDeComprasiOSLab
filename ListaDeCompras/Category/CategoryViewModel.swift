@@ -42,8 +42,20 @@ class CategoryViewModel: ObservableObject {
 		}
 	}
 	
-	func deleteCategory() {
+	func deleteCategory(_ categoryToDelete: CategoryEntity) {
 		
+		categories.removeAll { category in
+			category == categoryToDelete
+		}
+		
+		let result = DataController.shared.deleteCategory(categoryToDelete)
+		
+		switch result {
+		case .success(let categoryName):
+			print("\(categoryName) deletado com sucesso!")
+		case .failure(let error):
+			self.errorMessage = "Error deleting category: \(error)"
+		}
 	}
 	
 }

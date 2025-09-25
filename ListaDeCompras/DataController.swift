@@ -29,21 +29,38 @@ final class DataController {
 		
 	}
 	
+	static func seedIfNeeded(container: NSPersistentContainer) async throws {
+		
+		try await container.performBackgroundTask { context in
+			let req = NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
+			req.resultType = .countResultType
+			let count = try context.count(for: req)
+			
+			guard count == 0 else { return }
+			
+			let categoryBebidas = CategoryEntity(context: context)
+			
+			categoryBebidas.name = "Bebidas"
+			categoryBebidas.color = "#0f2bdb"
+			
+			if context.hasChanges {
+				try context.save()
+			}
+		}
+	}
+	
 	// Create Read Update Delete
 	
 	// TODO: Receber os atributos reais
 	func createProduct(_ productWrapper: ProductWrapper) -> Result<Product, Error> {
 		do {
-			let category = CategoryEntity(context: self.viewContext)
-			category.name = productWrapper.category.id
-			category.color = ""
 			
 			let newProduct = Product(context: self.viewContext)
 			newProduct.name = productWrapper.name
 			newProduct.price = productWrapper.price
-			newProduct.category = category
+			newProduct.category = productWrapper.category
 			
-			category.addToProducts(newProduct)
+			productWrapper.category.addToProducts(newProduct)
 			
 			try self.viewContext.save()
 			
@@ -107,8 +124,17 @@ final class DataController {
 		}
 	}
 	
-	func deleteCategory() {
-		
+	func deleteCategory(_ categoryToDelete: CategoryEntity) -> Result<String, Error> {
+		do {
+			let categoryName = categoryToDelete.name ?? "Unknown Category"
+			
+			self.viewContext.delete(categoryToDelete)
+			try self.viewContext.save()
+			
+			return .success(categoryName)
+		} catch {
+			return .failure(error)
+		}
 	}
 }
 
