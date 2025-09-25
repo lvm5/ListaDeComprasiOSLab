@@ -34,7 +34,7 @@ struct NewProductSheetView: View {
 				
 				Picker(selection: $productCategory) {
 					ForEach(categoryViewModel.categories, id:\.name) { category in
-						Text(category.name ?? "Unknown Category")
+						CategoryBadge(category: category)
 							.tag(category)
 					}
 					.onAppear {

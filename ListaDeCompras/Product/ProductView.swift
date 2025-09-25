@@ -13,15 +13,23 @@ struct ProductView: View {
 	
 	@State var newProductViewIsPresented: Bool = false
 	
+	@Environment(\.defaultMinListRowHeight) private var listRowHeight
+	
 	var body: some View {
 		NavigationStack {
-			Text(viewModel.errorMessage ?? "")
+			
+			if let errorMessage = viewModel.errorMessage {
+				Text(errorMessage)
+			}
 			
 			List {
 				ForEach(viewModel.products) { product in
 					// TODO: Tratar opcional na VM
 					HStack {
+						
 						Text(product.name ?? "Unknown Name")
+						CategoryBadge(category: product.category!)
+
 						Spacer()
 						Text("R$\(product.price, specifier: "%.2f")")
 					}
@@ -35,8 +43,11 @@ struct ProductView: View {
 					}
 				}
 
-				
 			}
+			
+			Text("Total - R$\(viewModel.totalProductPrice, specifier: "%.2f")")
+				.font(.title)
+			
 			.sheet(isPresented: $newProductViewIsPresented) {
 				NewProductSheetView(viewModel: viewModel)
 					.interactiveDismissDisabled()

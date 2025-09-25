@@ -39,9 +39,13 @@ final class DataController {
 			guard count == 0 else { return }
 			
 			let categoryBebidas = CategoryEntity(context: context)
+			let categoryLaticinios = CategoryEntity(context: context)
 			
 			categoryBebidas.name = "Bebidas"
 			categoryBebidas.color = "#0f2bdb"
+			
+			categoryLaticinios.name = "Laticinios"
+			categoryLaticinios.color = "#faf7f7"
 			
 			if context.hasChanges {
 				try context.save()

@@ -10,9 +10,11 @@ import Foundation
 class ProductViewModel: ObservableObject {
 	@Published var products: [Product] = []
 	@Published var errorMessage: String? = nil
+	@Published var totalProductPrice: Float = 0.0
 
 	init() {
 		fetchProducts()
+		calculateTotalProductPrice()
 	}
 	
 	func createProduct(productName: String, productIntPrice: Int, productCentPrice: Int, productCategory: CategoryEntity) {
@@ -25,6 +27,7 @@ class ProductViewModel: ObservableObject {
 		switch result {
 		case .success(let product):
 			self.products.append(product)
+			calculateTotalProductPrice()
 		case .failure(let error):
 			self.errorMessage = "Error creating Product: \(error)"
 		}
@@ -53,8 +56,22 @@ class ProductViewModel: ObservableObject {
 		switch result {
 		case .success(let productName):
 			print("\(productName) deletado com sucesso!")
+			calculateTotalProductPrice()
 		case .failure(let error):
 			self.errorMessage = "Error deleting product: \(error)"
 		}
+	}
+	
+	func calculateTotalProductPrice() {
+		
+		var prices: [Float] = []
+		
+		products.forEach { product in
+			prices.append(product.price)
+		}
+		
+		let sum = prices.reduce(0, +)
+		
+		self.totalProductPrice = sum
 	}
 }
