@@ -14,6 +14,7 @@ class ShoppingListViewModel: ObservableObject {
 	
 	init() {
 		fetchShoppingLists()
+		createMockShoppingLists()
 	}
 	
 	func fetchShoppingLists() {
@@ -25,5 +26,13 @@ class ShoppingListViewModel: ObservableObject {
 		case .failure(let error):
 			self.errorMessage = "Failed to fetch shopping lists: \(error)"
 		}
+	}
+	
+	func createMockShoppingLists() {
+		let list1 = ShoppingList(context: DataController.shared.viewContext)
+		let list2 = ShoppingList(context: DataController.shared.viewContext)
+		let list3 = ShoppingList(context: DataController.shared.viewContext)
+		
+		self.shoppingLists = [list1, list2, list3]
 	}
 }
