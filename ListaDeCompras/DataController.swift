@@ -140,5 +140,19 @@ final class DataController {
 			return .failure(error)
 		}
 	}
+		
+	func fetchShoppingLists() -> Result<[ShoppingList], Error> {
+		
+		let fetchRequest = NSFetchRequest<ShoppingList>(entityName: "ShoppingList")
+		
+		do {
+			let result = try viewContext.fetch(fetchRequest)
+			
+			return .success(result)
+		} catch {
+			return .failure(error)
+		}
+	}
+	
 }
 
