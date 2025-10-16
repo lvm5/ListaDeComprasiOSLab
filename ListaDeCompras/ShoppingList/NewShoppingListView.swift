@@ -20,6 +20,8 @@ struct NewShoppingListView: View {
 	
 	@State var selectedProducts: [Product] = []
 	
+	@State var allProductsList: [Product] = []
+	
 	var body: some View {
 		NavigationStack {
 			VStack {
@@ -37,22 +39,26 @@ struct NewShoppingListView: View {
 					.fontWeight(.semibold)
 				
 				ScrollView {
-					ForEach(productViewModel.products) { product in
-						let isSelectedBinding = Binding<Bool>(
-							get: { selectedProducts.contains(where: { $0.id == product.id } ) },
-							set: { newValue in
-								if newValue {
-									selectedProducts.append(product)
-								} else {
-									selectedProducts.removeAll(where: { $0.id == product.id } )
+					if !productViewModel.products.isEmpty {
+						ForEach(allProductsList) { product in
+							let isSelectedBinding = Binding<Bool>(
+								get: { selectedProducts.contains(where: { $0.id == product.id } ) },
+								set: { newValue in
+									if newValue {
+										selectedProducts.append(product)
+									} else {
+										selectedProducts.removeAll(where: { $0.id == product.id } )
+									}
+									shoppingListTotalCost = selectedProducts.reduce(0) { $0 + $1.price }
 								}
-								shoppingListTotalCost = selectedProducts.reduce(0) { $0 + $1.price }
-							}
-						)
-						
-						CheckMarkRow(isSelected: isSelectedBinding, product: product)
-						
-						Divider()
+							)
+							
+							CheckMarkRow(isSelected: isSelectedBinding, product: product)
+
+							Divider()
+						}
+					} else {
+						Text("Não há produtos cadastrados")
 					}
 				}
 			}
@@ -70,6 +76,8 @@ struct NewShoppingListView: View {
 						let wrapper = ShoppingListWrapper(date: shoppingListDate, name: shoppingListName, totalCost: shoppingListTotalCost, products: selectedProducts)
 						
 						viewModel.createShoppingList(with: wrapper)
+						
+						dismiss()
 					} label: {
 						Image(systemName: "checkmark")
 					}
@@ -77,6 +85,9 @@ struct NewShoppingListView: View {
 				}
 			}
 			.navigationTitle("Nova Lista de Compras")
+		}
+		.onAppear {
+			allProductsList = productViewModel.products.sorted { $0.category?.name ?? "" < $1.category?.name ?? "" }
 		}
 	}
 }

@@ -19,8 +19,28 @@ struct ShoppingListsView: View {
 				Color("ShoppingListBackground")
 					.ignoresSafeArea()
 				
-				List {
-					ForEach(viewModel.shoppingLists) { shoppingList in
+				ScrollView {
+					
+					NavigationLink {
+						NewShoppingListView(viewModel: viewModel)
+					} label: {
+						HStack {
+							Spacer()
+							Image(systemName: "plus")
+								.foregroundStyle(.white)
+							Spacer()
+						}
+						.frame(height: 25)
+						.padding()
+						.background(
+							Color.secondary.opacity(0.7)
+								.clipShape(RoundedRectangle(cornerRadius: 15))
+						)
+						.padding(.horizontal)
+						.padding(.vertical)
+					}
+					
+					ForEach(viewModel.shoppingLists.sorted { $0.date ?? Date.now.advanced(by: 1000000) > $1.date ?? Date.now.advanced(by: 1000000) }) { shoppingList in
 						ShoppingListCard(shoppingList: shoppingList)
 							.padding(.bottom)
 					}
@@ -28,7 +48,6 @@ struct ShoppingListsView: View {
 				.scrollContentBackground(.hidden)
 				.listStyle(.automatic)
 				.background(Color("ShoppingListBackground"))
-				
 			}
 			.navigationTitle("Listas de Compras")
 		}

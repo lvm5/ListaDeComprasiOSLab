@@ -13,8 +13,8 @@ class ProductViewModel: ObservableObject {
 	@Published var totalProductPrice: Float = 0.0
 
 	init() {
-//		fetchProducts()
-		populateWithMockProducts()
+		fetchProducts()
+//		populateWithMockProducts()
 		calculateTotalProductPrice()
 	}
 	
