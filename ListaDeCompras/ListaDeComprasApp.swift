@@ -13,9 +13,11 @@ struct ListaDeComprasApp: App {
 	let dataController = DataController.shared
 	@AppStorage("didSeed") private var didSeed: Bool = false
 	
+	@State var currentView = "ShoppingListView"
+	
 	var body: some Scene {
 		WindowGroup {
-			TabView {
+			TabView(selection: $currentView) {
 				ProductView()
 					.tabItem {
 						Label {
@@ -24,6 +26,17 @@ struct ListaDeComprasApp: App {
 							Image(systemName: "basket.fill")
 						}
 					}
+					.tag("ProductView")
+				
+				ShoppingListsView()
+					.tabItem {
+						Label {
+							Text("Listas")
+						} icon: {
+							Image(systemName: "list.bullet.rectangle.portrait.fill")
+						}
+					}
+					.tag("ShoppingListView")
 				
 				CategoryView()
 					.tabItem {
@@ -33,6 +46,8 @@ struct ListaDeComprasApp: App {
 							Image(systemName: "tag.fill")
 						}
 					}
+					.tag("CategoryView")
+				
 			}
 			.task {
 				if !didSeed {

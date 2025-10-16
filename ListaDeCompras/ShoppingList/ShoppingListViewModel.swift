@@ -13,7 +13,7 @@ class ShoppingListViewModel: ObservableObject {
 	@Published var errorMessage: String? = nil
 	
 	init() {
-		createMockShoppingLists()
+//		createMockShoppingLists()
 		fetchShoppingLists()
 	}
 	
