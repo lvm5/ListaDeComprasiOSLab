@@ -13,8 +13,8 @@ class ShoppingListViewModel: ObservableObject {
 	@Published var errorMessage: String? = nil
 	
 	init() {
-		fetchShoppingLists()
 		createMockShoppingLists()
+		fetchShoppingLists()
 	}
 	
 	func fetchShoppingLists() {
@@ -25,6 +25,17 @@ class ShoppingListViewModel: ObservableObject {
 			self.shoppingLists = shoppingLists
 		case .failure(let error):
 			self.errorMessage = "Failed to fetch shopping lists: \(error)"
+		}
+	}
+	
+	func createShoppingList(with wrapper: ShoppingListWrapper) {
+		let result = DataController.shared.createShoppingList(wrapper)
+		
+		switch result {
+		case .success(let shoppingList):
+			self.shoppingLists.append(shoppingList)
+		case .failure(let error):
+			self.errorMessage = "Failed to create Shopping List: \(error)"
 		}
 	}
 	

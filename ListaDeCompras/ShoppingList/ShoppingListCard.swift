@@ -25,7 +25,7 @@ struct ShoppingListCard: View {
 				Text(shoppingList.name ?? "Shopping List Name")
 					.bold()
 				
-				Text("\(shoppingList.totalCost)")
+				Text("R$\(String(format: "%.2f", shoppingList.totalCost))")
 					.font(.subheadline)
 					.foregroundStyle(Color("PrimaryColor"))
 				
@@ -43,7 +43,7 @@ struct ShoppingListCard: View {
 				.fill(Color("ShoppingListCardBackground"))
 		)
 		.frame(width: UIScreen.main.bounds.width - 50, height: 125)
-		.shadow(radius: 10)
+//		.shadow(radius: 10)
 	}
 	
 }

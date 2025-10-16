@@ -13,7 +13,8 @@ class ProductViewModel: ObservableObject {
 	@Published var totalProductPrice: Float = 0.0
 
 	init() {
-		fetchProducts()
+//		fetchProducts()
+		populateWithMockProducts()
 		calculateTotalProductPrice()
 	}
 	
@@ -73,5 +74,19 @@ class ProductViewModel: ObservableObject {
 		let sum = prices.reduce(0, +)
 		
 		self.totalProductPrice = sum
+	}
+	
+	func populateWithMockProducts() {
+		let p1 = Product(context: DataController.shared.viewContext)
+		p1.name = "Toalhas"
+		p1.price = 10
+		let p2 = Product(context: DataController.shared.viewContext)
+		p2.name = "Fogões"
+		p2.price = 10
+		let p3 = Product(context: DataController.shared.viewContext)
+		p3.name = "Geladeiras"
+		p3.price = 10
+		
+		self.products = [p1, p2, p3]
 	}
 }

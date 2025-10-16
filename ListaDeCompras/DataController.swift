@@ -140,6 +140,27 @@ final class DataController {
 			return .failure(error)
 		}
 	}
+	
+	func createShoppingList(_ shoppingListWrapper: ShoppingListWrapper) -> Result<ShoppingList, Error> {
+		let newShoppingList = ShoppingList(context: self.viewContext)
+		
+		newShoppingList.date = shoppingListWrapper.date
+		newShoppingList.name = shoppingListWrapper.name
+		newShoppingList.totalCost = shoppingListWrapper.totalCost
+		
+		shoppingListWrapper.products.forEach { product in
+			product.addToShoppingList(newShoppingList)
+			newShoppingList.addToProducts(product)
+		}
+		
+		do {
+			try viewContext.save()
+			
+			return .success(newShoppingList)
+		} catch {
+			return .failure(error)
+		}
+	}
 		
 	func fetchShoppingLists() -> Result<[ShoppingList], Error> {
 		
