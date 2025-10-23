@@ -26,6 +26,7 @@ struct CheckMarkRow: View {
 			}
 			
 		}
+        .padding(.trailing, 16)
 	}
 }
 

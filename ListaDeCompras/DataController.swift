@@ -54,8 +54,9 @@ final class DataController {
 	}
 	
 	// Create Read Update Delete
-	
 	// TODO: Receber os atributos reais
+    
+    //MARK: - CREATE PRODUCT
 	func createProduct(_ productWrapper: ProductWrapper) -> Result<Product, Error> {
 		do {
 			
@@ -74,7 +75,7 @@ final class DataController {
 		}
 	}
 	
-	
+    //MARK: - FETCH PRODUCT
 	func fetchProducts() -> Result<[Product], Error> {
 		do {
 			let productsFetchRequest = NSFetchRequest<Product>(entityName: "Product")
@@ -86,7 +87,31 @@ final class DataController {
 			return .failure(error)
 		}
 	}
-	
+    
+    //MARK: - UPDATE PRODUCT
+    func updateProduct(_ productWrapper: ProductWrapper) -> Result<Product, Error> {
+        do {
+            let fetchRequest = NSFetchRequest<Product>(entityName: "Product")
+            fetchRequest.predicate = NSPredicate(format: "name == %@", productWrapper.name)
+
+            if let productToUpdate = try self.viewContext.fetch(fetchRequest).first {
+                productToUpdate.price = productWrapper.price
+                productToUpdate.category = productWrapper.category
+                productWrapper.category.addToProducts(productToUpdate)
+
+                try self.viewContext.save()
+
+                return .success(productToUpdate)
+            } else {
+                // Produto não encontrado, pode criar ou retornar erro
+                return .failure(NSError(domain: "UpdateProduct", code: 404, userInfo: [NSLocalizedDescriptionKey: "Product not found"]))
+            }
+        } catch {
+            return .failure(error)
+        }
+    }
+
+    //MARK: - DELETE PRODUCT
 	func deleteProduct(_ productToDelete: Product) -> Result<String, Error> {
 		do {
 			let productName = productToDelete.name ?? "Unknown Product"
@@ -100,7 +125,8 @@ final class DataController {
 		}
 	}
 	
-	func createCategory(_ categoryWrapper: CategoryWrapper) -> Result<CategoryEntity, Error> {
+    //MARK: - CREATE CATEGORY
+    func createCategory(_ categoryWrapper: CategoryWrapper) -> Result<CategoryEntity, Error> {
 		
 		do {
 			let newCategory = CategoryEntity(context: self.viewContext)
@@ -116,6 +142,7 @@ final class DataController {
 		
 	}
 	
+    //MARK: - FETCH CATEGORY
 	func fetchCategories() -> Result<[CategoryEntity], Error> {
 		let fetchRequest = NSFetchRequest<CategoryEntity>(entityName: "CategoryEntity")
 		
@@ -128,6 +155,29 @@ final class DataController {
 		}
 	}
 	
+    //MARK: - UPDATE CATEGORY
+    func updateCategory(_ categoryWrapper: CategoryWrapper) -> Result<CategoryEntity, Error> {
+        do {
+            let fetchRequest = NSFetchRequest<CategoryEntity>(entityName: "Category")
+            fetchRequest.predicate = NSPredicate(format: "name == %@", categoryWrapper.name)
+
+            if let categoryToUpdate = try self.viewContext.fetch(fetchRequest).first {
+                categoryToUpdate.name = categoryWrapper.name
+                categoryToUpdate.color = categoryWrapper.color
+
+                try self.viewContext.save()
+
+                return .success(categoryToUpdate)
+            } else {
+                // Category não encontrada, pode criar ou retornar erro
+                return .failure(NSError(domain: "UpdateCategory", code: 404, userInfo: [NSLocalizedDescriptionKey: "Category not found"]))
+            }
+        } catch {
+            return .failure(error)
+        }
+    }
+    
+    //MARK: - DELETE CATEGORY
 	func deleteCategory(_ categoryToDelete: CategoryEntity) -> Result<String, Error> {
 		do {
 			let categoryName = categoryToDelete.name ?? "Unknown Category"
@@ -141,6 +191,7 @@ final class DataController {
 		}
 	}
 	
+    //MARK: - CREATE SHOPPING LIST
 	func createShoppingList(_ shoppingListWrapper: ShoppingListWrapper) -> Result<ShoppingList, Error> {
 		let newShoppingList = ShoppingList(context: self.viewContext)
 		
@@ -162,6 +213,7 @@ final class DataController {
 		}
 	}
 		
+    //MARK: - FETCH SHOPPING LIST
 	func fetchShoppingLists() -> Result<[ShoppingList], Error> {
 		
 		let fetchRequest = NSFetchRequest<ShoppingList>(entityName: "ShoppingList")
@@ -176,4 +228,3 @@ final class DataController {
 	}
 	
 }
-

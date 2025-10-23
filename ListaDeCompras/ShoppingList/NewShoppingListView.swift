@@ -61,6 +61,7 @@ struct NewShoppingListView: View {
 						Text("Não há produtos cadastrados")
 					}
 				}
+                .scrollIndicators(.hidden)
 			}
 			.toolbar {
 				ToolbarItem(placement: .cancellationAction) {
@@ -87,7 +88,7 @@ struct NewShoppingListView: View {
 			.navigationTitle("Nova Lista de Compras")
 		}
 		.onAppear {
-			allProductsList = productViewModel.products.sorted { $0.category?.name ?? "" < $1.category?.name ?? "" }
+			allProductsList = productViewModel.products.sorted { ($0.category?.name ?? "") < ($1.category?.name ?? "") }
 		}
 	}
 }

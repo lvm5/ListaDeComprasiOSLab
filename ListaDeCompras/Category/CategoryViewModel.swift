@@ -17,6 +17,7 @@ class CategoryViewModel: ObservableObject {
 		fetchCategories()
 	}
 	
+    //MARK: - CREATE CATEGORY
 	func createCategory(categoryName: String, categoryColor: Color) {
 		
 		let newCategory = CategoryWrapper(name: categoryName, color: categoryColor.toHexString())
@@ -30,7 +31,8 @@ class CategoryViewModel: ObservableObject {
 			self.errorMessage = "Failed to create Category: \(error)"
 		}
 	}
-	
+    
+    //MARK: - FETCH CATEGORY
 	func fetchCategories() {
 		let result = DataController.shared.fetchCategories()
 		
@@ -42,6 +44,25 @@ class CategoryViewModel: ObservableObject {
 		}
 	}
 	
+    //MARK: - UPDATE PRODUCTS
+    func updateCategory(_ categoryToUpdate: Category, updateName: String, updateCategoryColor: Color) {
+        
+        
+        let updatedWrapper = CategoryWrapper(name: updateName, color: updateCategoryColor.toHexString())
+        
+        let result = DataController.shared.updateCategory(updatedWrapper)
+        
+        switch result {
+        case .success(let updatedCategory):
+            print("\(updatedCategory) editado com sucesso!")
+
+        case .failure(let error):
+            self.errorMessage = "Error update product: \(error)"
+        }
+    }
+    
+    
+    //MARK: - DELETE CATEGORY
 	func deleteCategory(_ categoryToDelete: CategoryEntity) {
 		
 		categories.removeAll { category in

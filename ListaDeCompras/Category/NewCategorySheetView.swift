@@ -42,7 +42,7 @@ struct NewCategorySheetView: View {
 				}
 				
 				ToolbarItem(placement: .confirmationAction) {
-					Button {
+                    Button {
 						viewModel.createCategory(categoryName: categoryName, categoryColor: categoryColor)
 						dismiss()
 					} label: {

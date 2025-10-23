@@ -33,6 +33,7 @@ struct ShoppingListCard: View {
 				
 				Text("\(shoppingList.date ?? Date.now)")
 					.font(.caption)
+                    .foregroundStyle(.secondary)
 			}
 			
 			Spacer()
