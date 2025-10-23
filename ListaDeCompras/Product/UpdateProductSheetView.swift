@@ -19,6 +19,8 @@ struct UpdateProductSheetView: View {
     @State var productCentPrice: Int = 0
     @State var productCategory: CategoryEntity? = nil
     
+    var productToEdit: Product
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -27,7 +29,7 @@ struct UpdateProductSheetView: View {
                     Text("Nome")
                     
                     TextField(text: $productName) {
-                        Text("Novo nome do produto")
+                        Text("Alterar nome do produto")
                     }
                     
                 }
@@ -88,7 +90,7 @@ struct UpdateProductSheetView: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        viewModel.createProduct(productName: productName, productIntPrice: productIntPrice, productCentPrice: productCentPrice, productCategory: productCategory!)
+                        viewModel.updateProduct(productToEdit, newName: productName, newIntPrice: productIntPrice, newCentPrice: productCentPrice, newCategory: productCategory!)
                         dismiss()
                     } label: {
                         Image(systemName: "checkmark")
@@ -105,5 +107,13 @@ struct UpdateProductSheetView: View {
 }
 
 #Preview {
-    UpdateProductSheetView(viewModel: ProductViewModel())
+    let context = DataController.shared.viewContext
+    let mockCategory = CategoryEntity(context: context)
+    mockCategory.name = "Exemplo Categoria"
+    mockCategory.color = "#FFFFFF"
+    let mockProduct = Product(context: context)
+    mockProduct.name = "Exemplo Produto"
+    mockProduct.price = 0.0
+    mockProduct.category = mockCategory
+    return UpdateProductSheetView(viewModel: ProductViewModel(), productToEdit: mockProduct)
 }

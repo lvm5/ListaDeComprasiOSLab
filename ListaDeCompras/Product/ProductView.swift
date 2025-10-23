@@ -65,7 +65,7 @@ struct ProductView: View {
                 }
             
                 .sheet(item: $productToEdit) { editingProduct in
-                    UpdateProductSheetView(viewModel: viewModel)
+                    UpdateProductSheetView(viewModel: viewModel, productToEdit: editingProduct)
                         .interactiveDismissDisabled()
                         .presentationDetents([.fraction(0.70)])
                 }
