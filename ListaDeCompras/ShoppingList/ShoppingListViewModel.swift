@@ -6,12 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
+import PhotosUI
+
 
 class ShoppingListViewModel: ObservableObject {
 	
 	@Published var shoppingLists: [ShoppingList] = []
 	@Published var errorMessage: String? = nil
-	
+    @Published var selectedImage: UIImage? = nil
+    @Published var showCamera = false
+    @Published var showPhotoPicker = false
+    
 	init() {
 //		createMockShoppingLists()
 		fetchShoppingLists()

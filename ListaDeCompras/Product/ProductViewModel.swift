@@ -50,6 +50,7 @@ class ProductViewModel: ObservableObject {
     
     //MARK: - UPDATE PRODUCTS
     func updateProduct(_ productToUpdate: Product, newName: String, newIntPrice: Int, newCentPrice: Int, newCategory: CategoryEntity) {
+        
         let updatedPrice = Float(newIntPrice) + (Float(newCentPrice) / 100)
         
         let updatedWrapper = ProductWrapper(name: newName, price: updatedPrice, category: newCategory)
@@ -58,10 +59,10 @@ class ProductViewModel: ObservableObject {
         
         switch result {
         case .success(let updatedProduct):
-            
             if let index = self.products.firstIndex(of: productToUpdate) {
                 self.products[index] = updatedProduct
             }
+            print("\(updatedProduct) editado com sucesso!")
             calculateTotalProductPrice()
         case .failure(let error):
             self.errorMessage = "Error update product: \(error)"

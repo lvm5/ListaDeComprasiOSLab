@@ -10,11 +10,9 @@ import SwiftUI
 struct NewCategorySheetView: View {
 	
 	@ObservedObject var viewModel: CategoryViewModel
-	
 	@Environment(\.dismiss) var dismiss
 	
 	@State var categoryName: String = ""
-	
 	@State var categoryColor: Color = .white
 	
 	var body: some View {

@@ -30,6 +30,7 @@ struct ProductView: View {
                     HStack {
                         
                         Text(product.name ?? "Unknown Name")
+                            .padding(.horizontal, 6)
                         CategoryBadge(category: product.category!)
                         
                         Spacer()
@@ -55,8 +56,8 @@ struct ProductView: View {
                 
             }
             
-            Text("Total - R$\(viewModel.totalProductPrice, specifier: "%.2f")")
-                .font(.title)
+//            Text("Total - R$\(viewModel.totalProductPrice, specifier: "%.2f")")
+//                .font(.title)
             
                 .sheet(isPresented: $newProductViewIsPresented) {
                     NewProductSheetView(viewModel: viewModel)

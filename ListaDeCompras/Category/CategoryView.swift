@@ -14,6 +14,8 @@ struct CategoryView: View {
     @State var newCategorySheetIsPresented: Bool = false
     @State private var categoryToEdit: CategoryEntity? = nil
     @State var updateCategorySheetIsPresented: Bool = false
+    @State private var editCategorySheetIsPresented: Bool = false
+
     
     @Environment(\.defaultMinListRowHeight) var listRowHeight
     
@@ -49,6 +51,12 @@ struct CategoryView: View {
             }
             .sheet(isPresented: $newCategorySheetIsPresented) {
                 NewCategorySheetView(viewModel: viewModel)
+            }
+            
+            .sheet(item: $categoryToEdit) { editingCategory in
+                UpdateCategorySheetView(viewModel: viewModel, categoryToEdit: editingCategory)
+                    .interactiveDismissDisabled()
+                    .presentationDetents([.fraction(0.70)])
             }
             
             .toolbar {

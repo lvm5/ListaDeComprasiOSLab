@@ -45,18 +45,18 @@ class CategoryViewModel: ObservableObject {
 	}
 	
     //MARK: - UPDATE PRODUCTS
-    func updateCategory(_ categoryToUpdate: Category, updateName: String, updateCategoryColor: Color) {
+    func updateCategory(_ categoryToUpdate: CategoryEntity, updateName: String, updateCategoryColor: Color) {
         
+        categoryToUpdate.name = updateName
+        categoryToUpdate.color = updateCategoryColor.toHexString()
         
-        let updatedWrapper = CategoryWrapper(name: updateName, color: updateCategoryColor.toHexString())
-        
-        let result = DataController.shared.updateCategory(updatedWrapper)
-        
-        switch result {
-        case .success(let updatedCategory):
-            print("\(updatedCategory) editado com sucesso!")
-
-        case .failure(let error):
+        do {
+            try DataController.shared.viewContext.save()
+            if let index = categories.firstIndex(where: { $0 == categoryToUpdate }) {
+                categories[index] = categoryToUpdate
+            }
+            print("\(categoryToUpdate) editado com sucesso!")
+        } catch {
             self.errorMessage = "Error update product: \(error)"
         }
     }
@@ -80,7 +80,4 @@ class CategoryViewModel: ObservableObject {
 	}
 	
 }
-
-
-
 

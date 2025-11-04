@@ -8,11 +8,56 @@
 import SwiftUI
 
 struct UpdateCategorySheetView: View {
+    
+    @ObservedObject var viewModel: CategoryViewModel
+    @Environment(\.dismiss) var dismiss
+    
+    @State var categoryName: String = ""
+    @State var categoryColor: Color = .white
+    
+    var categoryToEdit: CategoryEntity
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Form {
+                HStack {
+                    Text("Nome")
+                    
+                    TextField(text: $categoryName) {
+                        Text("Alterar nome da categoria")
+                    }
+                }
+                
+                ColorPicker("Alterar cor da Categoria", selection: $categoryColor)
+            }
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        viewModel.updateCategory(categoryToEdit, updateName: categoryName, updateCategoryColor: categoryColor)
+                        dismiss()
+                    } label: {
+                        Image(systemName: "checkmark")
+                    }
+                    .disabled(categoryName == "" ? true : false)
+                }
+            }
+            .navigationTitle("Editar Categoria")
+        }
     }
 }
 
 #Preview {
-    UpdateCategorySheetView()
+    let context = DataController.shared.viewContext
+    let mockCategory = CategoryEntity(context: context)
+    mockCategory.name = "Exemplo Categoria"
+    mockCategory.color = "#FFFFFF"
+    return UpdateCategorySheetView(viewModel: CategoryViewModel(), categoryToEdit: mockCategory)
 }

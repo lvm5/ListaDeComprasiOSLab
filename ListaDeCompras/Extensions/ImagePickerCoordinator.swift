@@ -1,3 +1,11 @@
+//
+//  ImagePickerCoordinator.swift
+//  ListaDeCompras
+//
+//  Created by Leandro Vansan de Morais on 2025-10-23.
+//
+
+
 import SwiftUI
 import UIKit
 
